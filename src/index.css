@@ -14,11 +14,7 @@
 
 @layer base {
   body {
-    @apply font-sans bg-claude-bg text-claude-text transition-colors duration-300;
-  }
-  
-  .dark body {
-    @apply bg-claude-dark-bg text-gray-200;
+    @apply font-sans bg-claude-bg text-claude-text dark:bg-claude-dark-bg dark:text-gray-200 transition-colors duration-300;
   }
 
   h1, h2, h3, h4, h5, h6 {

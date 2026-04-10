@@ -54,6 +54,15 @@ export function Login() {
           Continue with Google
         </button>
       </div>
+
+      <footer className="mt-12 text-center max-w-md">
+        <p className="text-claude-muted dark:text-gray-400 text-sm">
+          © 2026 Aura do Clima. Desenvolvido por <a href="https://otaviogusto.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-claude-accent hover:underline font-medium">Otávio Gusto</a>.
+        </p>
+        <p className="text-claude-muted dark:text-gray-500 text-xs mt-2 uppercase tracking-widest font-medium">
+          Soluções tecnológicas para o seu negócio.
+        </p>
+      </footer>
     </div>
   );
 }
