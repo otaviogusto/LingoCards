@@ -46,8 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing in with Google', error);
+      if (error.code === 'auth/unauthorized-domain') {
+        alert('Este domínio não está autorizado no Firebase Console. Por favor, adicione seu domínio do Netlify na lista de "Domínios Autorizados" em Authentication > Settings > Authorized Domains no console do Firebase.');
+      } else {
+        alert(`Erro ao entrar: ${error.message}`);
+      }
     }
   };
 
