@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required, immutable) - Firebase Auth UID
+    //   - displayName: string (optional) - User's display name
+    //   - photoURL: string (optional) - User's profile picture URL
+    //   - createdAt: timestamp (required, immutable) - When the user account was created
+    //
+    // Collection: users/{userId}/progress
+    // Document ID: {levelId} (e.g., 'beginner', 'intermediate', 'advanced')
+    // Fields:
+    //   - viewedCards: list of strings (required) - Array of flashcard IDs
+    //   - lastAccessed: timestamp (required) - When the user last studied this level
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasOnlyAllowedFields(allowedFields) {
+      return request.resource.data.keys().hasOnly(allowedFields);
+    }
+    
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
+    }
+    
+    function uidNotModified() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
+    }
+
+    function isValidUrl(url) {
+      return url is string && (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidUser() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields(['uid', 'displayName', 'photoURL', 'createdAt']) &&
+             data.uid is string && data.uid.size() > 0 && data.uid.size() < 128 &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100)) &&
+             (!('photoURL' in data) || (isValidUrl(data.photoURL) && data.photoURL.size() <= 2048)) &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidProgress() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields(['viewedCards', 'lastAccessed']) &&
+             data.viewedCards is list && data.viewedCards.size() <= 1000 &&
+             data.lastAccessed is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser() && uidUnchanged();
+      allow update: if isOwner(userId) && isValidUser() && uidNotModified() && request.resource.data.createdAt == resource.data.createdAt;
+      
+      match /progress/{levelId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidProgress();
+        allow update: if isOwner(userId) && isValidProgress();
+      }
+    }
+  }
+}
