@@ -22,7 +22,7 @@ export function Layout() {
             <BookOpen className="w-6 h-6" />
             <span>LingoCards</span>
           </Link>
-          
+
           <div className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
@@ -32,13 +32,13 @@ export function Layout() {
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <div className="hidden sm:flex items-center gap-4">
-              <Link 
-                to="/profile" 
+              <Link
+                to="/profile"
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                <img 
-                  src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'User'}`} 
-                  alt="Profile" 
+                <img
+                  src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'User'}`}
+                  alt="Profile"
                   className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700"
                   referrerPolicy="no-referrer"
                 />
@@ -63,7 +63,7 @@ export function Layout() {
       <footer className="mt-auto py-8 border-t border-gray-200/50 dark:border-gray-700/50 text-center bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto px-4">
           <p className="text-claude-muted dark:text-gray-400 text-sm">
-            © 2026 Aura do Clima. Desenvolvido por <a href="https://otaviogusto.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-claude-accent hover:underline font-medium">Otávio Gusto</a>.
+            © 2026 LingoCards. Desenvolvido por <a href="https://otaviogusto.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-claude-accent hover:underline font-medium">Otávio Gusto</a>.
           </p>
           <p className="text-claude-muted dark:text-gray-500 text-xs mt-2 uppercase tracking-widest font-medium">
             Soluções tecnológicas para o seu negócio.
@@ -73,8 +73,8 @@ export function Layout() {
 
       {/* Mobile Bottom Navigation */}
       <nav className="sm:hidden sticky bottom-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 flex justify-around items-center h-16 pb-safe z-20">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className={cn(
             "flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors",
             location.pathname === '/' ? "text-claude-accent" : "text-claude-muted dark:text-gray-400 hover:text-claude-text dark:hover:text-gray-100"
@@ -83,8 +83,8 @@ export function Layout() {
           <BookOpen className="w-5 h-5" />
           <span>Study</span>
         </Link>
-        <Link 
-          to="/profile" 
+        <Link
+          to="/profile"
           className={cn(
             "flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors",
             location.pathname === '/profile' ? "text-claude-accent" : "text-claude-muted dark:text-gray-400 hover:text-claude-text dark:hover:text-gray-100"
